@@ -1,2 +1,4 @@
-# project-management-system-4663
+# Project Management System
 SWE 4663 Software Project Management Project
+
+Group 7
