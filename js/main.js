@@ -1,6 +1,4 @@
-// ui logic which handles rendering the project list and the "New Project" button.
-// uses store.js
-
+// main.js
 const newProjectBtn = document.getElementById('new-project-btn');
 const projectList = document.getElementById('project-list');
 const emptyState = document.getElementById('empty-state');
@@ -8,7 +6,7 @@ const emptyState = document.getElementById('empty-state');
 newProjectBtn.addEventListener('click', () => {
     const name = prompt("Enter a name for the new project:");
     if (name) {
-        addProject(name);// from store.js
+        addProject(name); // from store.js
         renderProjects();
     }
 });
@@ -18,10 +16,12 @@ function renderProjects() {
 
     emptyState.style.display = projects.length === 0 ? 'block' : 'none';
 
+    // clear existing rendered projects
     [...projectList.children].forEach(child => {
         if (child.id !== 'empty-state') child.remove();
     });
 
+    // render each project card
     projects.forEach(project => {
         const card = document.createElement('div');
         card.className = 'project-card';
@@ -29,3 +29,5 @@ function renderProjects() {
         projectList.appendChild(card);
     });
 }
+
+renderProjects();

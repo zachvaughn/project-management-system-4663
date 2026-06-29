@@ -1,12 +1,24 @@
-// data store for the whole app.
-// Everyone's pages/scripts should read and write through these functions
+// store.js
+// initialize from localStorage if data exists, otherwise default to empty arrays/null
+let projects = JSON.parse(localStorage.getItem('projects')) || [];
+let users = JSON.parse(localStorage.getItem('users')) || [];
+let currentUser = localStorage.getItem('currentUser') || null;
 
-let projects = [];
-let users = [];
-let currentUser = null; // tracks who's logged in for this session
+// helper function to save current state to localStorage
+function saveState() {
+    localStorage.setItem('projects', JSON.stringify(projects));
+    localStorage.setItem('users', JSON.stringify(users));
+
+    if (currentUser) {
+        localStorage.setItem('currentUser', currentUser);
+    } else {
+        localStorage.removeItem('currentUser');
+    }
+}
 
 function addUser(username, password) {
     users.push({ username, password });
+    saveState(); // save after modifying
 }
 
 function findUser(username) {
@@ -15,6 +27,7 @@ function findUser(username) {
 
 function setCurrentUser(username) {
     currentUser = username;
+    saveState(); // save after modifying
 }
 
 function getCurrentUser() {
@@ -23,15 +36,17 @@ function getCurrentUser() {
 
 function logout() {
     currentUser = null;
+    saveState(); // save after modifying
 }
 
 function addProject(name) {
     const project = {
         id: Date.now(),
         name: name,
-        requirements: [], // each requirement: { id, text, hours: { analysis, design, coding, testing, management } }
+        requirements: [],
     };
     projects.push(project);
+    saveState(); // save after modifying
     return project;
 }
 
