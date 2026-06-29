@@ -3,6 +3,16 @@ const newProjectBtn = document.getElementById('new-project-btn');
 const projectList = document.getElementById('project-list');
 const emptyState = document.getElementById('empty-state');
 
+// handle logout
+const logoutBtn = document.getElementById('logout-btn');
+
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', () => {
+        logout(); // calls the function from store.js
+        window.location.href = 'login.html'; // redirect to login page
+    });
+}
+
 newProjectBtn.addEventListener('click', () => {
     const name = prompt("Enter a name for the new project:");
     if (name) {
@@ -16,7 +26,7 @@ function renderProjects() {
 
     emptyState.style.display = projects.length === 0 ? 'block' : 'none';
 
-    // clear existing rendered projects
+    // clear rendered projects
     [...projectList.children].forEach(child => {
         if (child.id !== 'empty-state') child.remove();
     });

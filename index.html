@@ -4,28 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Management System</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-    <h1>Project Management System</h1>
-</header>
-
-<main>
-    <section id="project-list-section">
-        <div class="section-header">
-            <h2>Your Projects</h2>
-            <button id="new-project-btn">+ New Project</button>
-        </div>
-
-        <div id="project-list">
-            <p id="empty-state">No projects yet. Click "New Project" to get started.</p>
-        </div>
-    </section>
-</main>
-
 <script src="data/store.js"></script>
-<script src="js/main.js"></script>
+<script>
+    // send the user to the dashboard if logged in, otherwise send them to the login page
+    if (getCurrentUser()) {
+        window.location.href = "pages/dashboard.html";
+    } else {
+        window.location.href = "pages/login.html";
+    }
+</script>
+
 </body>
 </html>

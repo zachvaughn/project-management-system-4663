@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - Project Management System</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <h1>Project Management System</h1>
+</header>
+
+<main>
+    <section class="auth-form">
+        <h2>Log In</h2>
+
+        <form id="login-form">
+            <label for="login-username">Username</label>
+            <input type="text" id="login-username" required>
+
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" required>
+
+            <button type="submit">Log In</button>
+        </form>
+
+        <p id="login-error" class="error-text"></p>
+
+        <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    </section>
+</main>
+
+<script src="../data/store.js"></script>
+<script src="../js/auth.js"></script>
+</body>
+</html>

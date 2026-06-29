@@ -11,7 +11,7 @@ body {
 }
 
 header {
-    background-color: #181818;
+    background-color: #000000;
     color: white;
     padding: 1.5rem 2rem;
     display: flex;
@@ -42,7 +42,7 @@ main {
 }
 
 button {
-    background-color: #181818;
+    background-color: #000000;
     color: white;
     border: none;
     padding: 0.6rem 1.2rem;
@@ -64,4 +64,48 @@ button:hover {
 #empty-state {
     color: #777;
     font-style: italic;
+}
+
+.auth-form {
+    max-width: 350px;
+    margin: 3rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.auth-form h2 {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.auth-form label {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+.auth-form input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.auth-form button {
+    margin-top: 1rem;
+}
+
+.auth-form p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.error-text {
+    color: #c0392b;
+    font-size: 0.85rem;
 }

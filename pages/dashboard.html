@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Project Management System</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header>
+    <h1>Project Management System</h1>
+    <button id="logout-btn">Log Out</button>
+</header>
+
+<main>
+    <section id="project-list-section">
+        <div class="section-header">
+            <h2>Your Projects</h2>
+            <button id="new-project-btn">+ New Project</button>
+        </div>
+
+        <div id="project-list">
+            <p id="empty-state">No projects yet. Click "New Project" to get started.</p>
+        </div>
+    </section>
+</main>
+
+<script src="../data/store.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>
