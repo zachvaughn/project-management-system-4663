@@ -1,4 +1,3 @@
-// main.js
 const newProjectBtn = document.getElementById('new-project-btn');
 const projectList = document.getElementById('project-list');
 const emptyState = document.getElementById('empty-state');
