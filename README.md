@@ -20,12 +20,12 @@ In this page:
 - Save requirements back to store.js (localStorage)
 
 ### 3. Effort Logging
-- On each requirement, add ability to log hours by category: Requirements Analysis, Design, Coding, Testing, Project Management
+- After any requirements are created, you should be able to (in the project detail page for a project):
+- Log hours by category, per requirement: Requirements Analysis, Design, Coding, Testing, Project Management
 - Save effort logging back to store.js
 
 ### 4. Effort Reporting
-
-Summary view per project showing:
+After all the previous steps are done, there will then be the ability to view a summary per project showing:
 - Total hours per category across all requirements
 - Total hours per requirement across all categories
 
