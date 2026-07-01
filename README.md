@@ -9,6 +9,7 @@ SWE 4663 Software Project Management Project Group 7
 - Add ability to edit a project
 - Add ability to delete a project
 - Clicking a project card on the dashboard should open a project detail page
+- After this info is entered, you should return to dashboard and view the project cards of all created projects
 
 ### 2. Requirements Tracking
 - After project is created from previous step, you should be able to click on the project card on the dashboard to open a project detail page with a requirements section
