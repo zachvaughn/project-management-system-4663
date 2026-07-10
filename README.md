@@ -29,9 +29,9 @@ After all the previous steps are done, there will then be the ability to view a 
 - Total hours per category across all requirements
 - Total hours per requirement across all categories
 
-Could be a section on the project detail page or its own page
+Should be a section on the project detail page
 
 ### 5. General stuff
-- Navigation, every page needs a way to get back to the dashboard
+- Navigation, every page needs a way to get back to the dashboard (so either home button or click text in top left to go back to dashboard)
 - Make sure everything works (like clicking between pages doesn't break anything)
-- Add a getProjectById usage so project detail pages know which project they're viewing (probably URL query like ?id=12345)
+- Add a getProjectById usage so project detail pages know which project is being viewed (probably URL query like ?id=12345)
