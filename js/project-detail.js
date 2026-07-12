@@ -116,6 +116,86 @@ deleteBtn.addEventListener('click', () => {
 
 
 // task #4
+function renderEffortReport()
+    {
+        const categoryReport = document.getElementById("category-report");
+        const requirementReport = document.getElementById("requirement-report");
+
+        categoryReport.innerHTML = "";
+        requirementReport.innerHTML = "";
+
+        if (!currentProject.effortLogs || currentProject.effortLogs.length = 0)
+            {
+                report.innerHTML = "<p>No effort has been logged yet!<p>";
+                return;
+            }
+
+        const categoryTotals = {};
+
+        const requirementTotals = {};
+
+        currentProject.effortLogs.forEach(log =>
+            {
+                if (!categoryTotals[log.category])
+                    {
+                        categoryTotals[log.category] = 0;
+                    }
+
+                    categoryTotals[log.category] += Number(log.hours);
+
+                    if (!requirementTotals[log.requirementId])
+                        {
+                            requirementTotals[log.requirementId] = 0;
+                        }
+
+                    requirementTotals[log.requirementId] += Number(log.hours;)
+            });
+
+        const categoryTitle = document.createElement("h3");
+
+        categoryTitle.text.Context = "Hours by Category";
+
+        report.appendChild(categoryTitle);
+
+        const categoryList = document.createElement("ul");
+
+        for (const category in categoryTotals)
+            {
+                const li = document.createElement("li");
+
+                li.textContext = '${category}: ${categoryTotals[category]} hours(s)';
+
+                categoryList.appendChild(li);
+            }
+
+        categoryReport.appendChild(categoryList);
+
+        const requirementTitle = document.createElement("h3");
+
+        requirementTitle.textContent = "Hours by Requirement";
+
+        report.appendChild(requirementTitle);
+
+        const requirementList = document.createElement("ul")
+
+        for (const requirementId in requirementTotals)
+            {
+                const requirement = currentProject.requirements.find(r => r.id == requirementId);
+
+                const li = document.createElement("li");
+
+                li.textContent = '${requirement ? requirement.text : "Unknown Requirement"}: ${requirementTotals[requirementId]} hour(s)';
+
+                requirementList.appendChild(li);
+            }
+
+        requirementReport.appendChild(requirementList);
+    }
+
+renderEffortReport();
+
+
+
 // summary/report logic here
 // pull from currentProject.requirements and/or currentProject.effortLogs
 // to calculate totals per category and per requirement
