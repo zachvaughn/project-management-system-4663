@@ -79,6 +79,29 @@
             <h2>Effort Logging</h2>
             <button id="new-effort-btn">+ Log Effort</button>
         </div>
+
+        <form id="new-effort-form" style="display: none;">
+            <label for="ef-requirement">Requirement</label>
+            <select id="ef-requirement" required></select>
+
+            <label for="ef-category">Category</label>
+            <select id="ef-category" required>
+                <option value="Requirements Analysis">Requirements Analysis</option>
+                <option value="Design">Design</option>
+                <option value="Coding">Coding</option>
+                <option value="Testing">Testing</option>
+                <option value="Project Management">Project Management</option>
+            </select>
+
+            <label for="ef-hours">Hours</label>
+            <input type="number" id="ef-hours" min="0" step="0.25" required>
+
+            <div class="form-buttons">
+                <button type="submit">Save Effort</button>
+                <button type="button" id="cancel-effort-btn">Cancel</button>
+            </div>
+        </form>
+
         <div id="effort-log-list">
             <p id="effort-empty-state">No effort logged yet.</p>
         </div>
