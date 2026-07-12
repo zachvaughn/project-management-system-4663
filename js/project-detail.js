@@ -110,9 +110,83 @@ deleteBtn.addEventListener('click', () => {
 
 
 // task #3
-// effort log entries follow this shape: { id, requirementId, category, hours, date }
-// renderEffortReport() needs to be called again after a new effort log is saved
-// effort logging logic here
+const newEffortBtn = document.getElementById('new-effort-btn');
+const newEffortForm = document.getElementById('new-effort-form');
+const cancelEffortBtn = document.getElementById('cancel-effort-btn');
+const effortRequirementSelect = document.getElementById('ef-requirement');
+const effortLogList = document.getElementById('effort-log-list');
+const effortEmptyState = document.getElementById('effort-empty-state');
+
+newEffortBtn.addEventListener('click', () => {
+    if (!currentProject.requirements || currentProject.requirements.length === 0) {
+        alert('Add at least one requirement before logging effort.');
+        return;
+    }
+
+    effortRequirementSelect.innerHTML = currentProject.requirements
+        .map(r => `<option value="${r.id}">${r.text}</option>`)
+        .join('');
+
+    newEffortForm.style.display = 'block';
+    newEffortBtn.style.display = 'none';
+});
+
+cancelEffortBtn.addEventListener('click', () => {
+    newEffortForm.reset();
+    newEffortForm.style.display = 'none';
+    newEffortBtn.style.display = 'inline-block';
+});
+
+newEffortForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const requirementId = Number(effortRequirementSelect.value);
+    const category = document.getElementById('ef-category').value;
+    const hours = Number(document.getElementById('ef-hours').value);
+
+    if (!requirementId || !category || !hours || hours <= 0) return;
+
+    const entry = {
+        id: Date.now(),
+        requirementId: requirementId,
+        category: category,
+        hours: hours,
+        date: new Date().toISOString().split('T')[0],
+    };
+
+    if (!currentProject.effortLogs) currentProject.effortLogs = [];
+    currentProject.effortLogs.push(entry);
+    saveState(); // from store.js
+
+    newEffortForm.reset();
+    newEffortForm.style.display = 'none';
+    newEffortBtn.style.display = 'inline-block';
+
+    renderEffortLogs();
+    renderEffortReport();
+});
+
+function renderEffortLogs() {
+    effortLogList.innerHTML = '';
+
+    if (!currentProject.effortLogs || currentProject.effortLogs.length === 0) {
+        effortEmptyState.style.display = 'block';
+        effortLogList.appendChild(effortEmptyState);
+        return;
+    }
+
+    effortEmptyState.style.display = 'none';
+
+    currentProject.effortLogs.forEach(log => {
+        const requirement = currentProject.requirements.find(r => r.id === log.requirementId);
+        const entryDiv = document.createElement('div');
+        entryDiv.className = 'effort-log-entry';
+        entryDiv.textContent = `${requirement ? requirement.text : 'Unknown Requirement'} — ${log.category}: ${log.hours} hr(s) (${log.date})`;
+        effortLogList.appendChild(entryDiv);
+    });
+}
+
+renderEffortLogs();
 
 
 
@@ -176,3 +250,4 @@ function renderEffortReport() {
 }
 
 renderEffortReport();
+ 
