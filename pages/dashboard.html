@@ -24,6 +24,31 @@
             <p id="empty-state">No projects yet. Click "New Project" to get started.</p>
         </div>
     </section>
+
+    <section id="new-project-form-section" style="display: none;">
+        <h2>New Project</h2>
+        <form id="new-project-form">
+            <label for="np-name">Project Name</label>
+            <input type="text" id="np-name" required>
+
+            <label for="np-description">Description</label>
+            <textarea id="np-description" rows="3"></textarea>
+
+            <label for="np-owner">Owner / Project Manager</label>
+            <input type="text" id="np-owner">
+
+            <label for="np-members">Team Members (comma-separated)</label>
+            <input type="text" id="np-members" placeholder="e.g. Amber, Zach, Kacy">
+
+            <label for="np-risks">Risks (comma-separated)</label>
+            <input type="text" id="np-risks" placeholder="e.g. Data loss, Scope creep">
+
+            <div class="form-buttons">
+                <button type="submit">Create Project</button>
+                <button type="button" id="cancel-new-project-btn">Cancel</button>
+            </div>
+        </form>
+    </section>
 </main>
 
 <script src="../data/store.js"></script>

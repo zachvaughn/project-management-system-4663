@@ -2,9 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Project Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Detail - Project Management System</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
 
+<header>
+    <h1><a href="dashboard.html" class="home-link">Project Management System</a></h1>
+    <button id="logout-btn">Log Out</button>
+</header>
+
+<main>
+    <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+    <section id="project-info-section">
+        <div class="section-header">
+            <h2 id="project-name">Project Name</h2>
+            <div>
+                <button id="edit-project-btn">Edit</button>
+                <button id="delete-project-btn" class="danger-btn">Delete</button>
+            </div>
+        </div>
+        <div id="project-info-display">
+            <p id="project-description">Project description goes here.</p>
+            <p><strong>Owner:</strong> <span id="project-owner"></span></p>
+            <p><strong>Team Members:</strong> <span id="project-members"></span></p>
+            <p><strong>Risks:</strong></p>
+            <ul id="project-risks"></ul>
+        </div>
+
+        <form id="edit-project-form" style="display: none;">
+            <label for="ep-name">Project Name</label>
+            <input type="text" id="ep-name" required>
+
+            <label for="ep-description">Description</label>
+            <textarea id="ep-description" rows="3"></textarea>
+
+            <label for="ep-owner">Owner / Project Manager</label>
+            <input type="text" id="ep-owner">
+
+            <label for="ep-members">Team Members (comma-separated)</label>
+            <input type="text" id="ep-members">
+
+            <label for="ep-risks">Risks (comma-separated)</label>
+            <input type="text" id="ep-risks">
+
+            <div class="form-buttons">
+                <button type="submit">Save Changes</button>
+                <button type="button" id="cancel-edit-btn">Cancel</button>
+            </div>
+        </form>
+    </section>
+
+    <hr>
+
+    <!-- task #2 -->
+    <!-- add/edit/delete requirements inside this section -->
+    <!-- Use currentProjectId (see project-detail.js) to tie requirements to this project -->
+    <section id="requirements-section">
+        <div class="section-header">
+            <h2>Requirements</h2>
+            <button id="new-requirement-btn">+ Add Requirement</button>
+        </div>
+        <div id="requirements-list">
+            <p id="requirements-empty-state">No requirements yet.</p>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- task #3 -->
+    <!-- ability to log hours per requirement, per category, inside this section
+     using { id, requirementId, category, hours, date } -->
+    <section id="effort-logging-section">
+        <div class="section-header">
+            <h2>Effort Logging</h2>
+            <button id="new-effort-btn">+ Log Effort</button>
+        </div>
+        <div id="effort-log-list">
+            <p id="effort-empty-state">No effort logged yet.</p>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- task #4 -->
+    <!-- summary view here: total hours per category, per requirement -->
+    <!-- if task #3 isn't complete yet when you start,
+    effort log entries will follow this shape:
+    { id, requirementId, category, hours, date } in project-detail.js -->
+    <section id="effort-reporting-section">
+        <div class="section-header">
+            <h2>Effort Summary</h2>
+        </div>
+        <div id="effort-report">
+            <p id="report-empty-state">No data to report yet. This will populate once requirements are added and effort has been logged.</p>
+        </div>
+    </section>
+
+</main>
+
+<script src="../data/store.js"></script>
+<script src="../js/project-detail.js"></script>
 </body>
 </html>

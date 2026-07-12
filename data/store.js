@@ -1,4 +1,3 @@
-// store.js
 // initialize from localStorage if data exists, otherwise default to empty arrays/null
 let projects = JSON.parse(localStorage.getItem('projects')) || [];
 let users = JSON.parse(localStorage.getItem('users')) || [];
@@ -39,11 +38,16 @@ function logout() {
     saveState(); // save after modifying
 }
 
-function addProject(name) {
+function addProject(name, description = '', owner = '', members = [], risks = []) {
     const project = {
         id: Date.now(),
         name: name,
-        requirements: [],
+        description: description,
+        owner: owner,
+        members: members, // array of strings
+        risks: risks, // array of { description, status }
+        requirements: [], // Task #2 will populate: { id, text, type }
+        effortLogs: [], // Task #3 will populate: { id, requirementId, category, hours, date }
     };
     projects.push(project);
     saveState(); // save after modifying
@@ -56,4 +60,17 @@ function getProjects() {
 
 function getProjectById(id) {
     return projects.find(p => p.id === id);
+}
+
+function updateProject(id, updates) {
+    const project = getProjectById(id);
+    if (!project) return null;
+    Object.assign(project, updates);
+    saveState();
+    return project;
+}
+
+function deleteProject(id) {
+    projects = projects.filter(p => p.id !== id);
+    saveState();
 }
