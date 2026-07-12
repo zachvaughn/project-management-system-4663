@@ -2,7 +2,7 @@
 SWE 4663 Software Project Management Project Group 7
 
 ## Tasks
-### 1. Projects (General Info)
+### 1. Projects (done by zach)
 
 - Replace the prompt() for creating a project with an actual form (should store new fields as well)
 - Add fields: project description, owner/PM name, team members list, risks list with status
@@ -19,12 +19,12 @@ In this page:
 - Requirements should be tied to a specific project by ID
 - Save requirements back to store.js (localStorage)
 
-### 3. Effort Logging
+### 3. Effort Logging (amber)
 - After any requirements are created, you should be able to (in the project detail page for a project):
 - Log hours by category, per requirement: Requirements Analysis, Design, Coding, Testing, Project Management
 - Save effort logging back to store.js
 
-### 4. Effort Reporting
+### 4. Effort Reporting (kayden)
 After all the previous steps are done, there will then be the ability to view a summary per project showing:
 - Total hours per category across all requirements
 - Total hours per requirement across all categories
