@@ -74,3 +74,42 @@ function deleteProject(id) {
     projects = projects.filter(p => p.id !== id);
     saveState();
 }
+function addRequirement(projectId, text, type) {
+    const project = getProjectById(projectId);
+    if (!project) return null;
+
+    const requirement = {
+        id: Date.now(),
+        text,
+        type // "Functional" or "Non-Functional"
+    };
+
+    project.requirements.push(requirement);
+    saveState();
+
+    return requirement;
+}
+
+function updateRequirement(projectId, requirementId, updates) {
+    const project = getProjectById(projectId);
+    if (!project) return null;
+
+    const requirement = project.requirements.find(r => r.id === requirementId);
+    if (!requirement) return null;
+
+    Object.assign(requirement, updates);
+    saveState();
+
+    return requirement;
+}
+
+function deleteRequirement(projectId, requirementId) {
+    const project = getProjectById(projectId);
+    if (!project) return;
+
+    project.requirements = project.requirements.filter(
+        r => r.id !== requirementId
+    );
+
+    saveState();
+}
