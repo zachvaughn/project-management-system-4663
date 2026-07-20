@@ -1,4 +1,4 @@
-// Get the Project ID from the URL 
+// get the Project ID from the URL 
 const urlParams = new URLSearchParams(window.location.search);
 const projectId = parseInt(urlParams.get('projectId'), 10);
 
@@ -9,7 +9,7 @@ const typeInput = document.getElementById('requirement-type');
 const functionalContainer = document.getElementById('functional-requirements');
 const nonFunctionalContainer = document.getElementById('non-functional-requirements');
 
-// Render Requirements
+// render Requirements
 function renderRequirements() {
     const project = getProjectById(projectId);
     
@@ -57,7 +57,7 @@ function renderRequirements() {
     }
 }
 
-// Handle Add Requirement
+// handle Add Requirement
 form.addEventListener('submit', (e) => {
     e.preventDefault(); // Prevent page refresh
 
@@ -71,18 +71,18 @@ form.addEventListener('submit', (e) => {
     }
 });
 
-// Handle Edit Requirement (Exposed to window so inline onclick can read it)
+// handle Edit Requirement (Exposed to window so inline onclick can read it)
 window.handleEdit = function(reqId, currentText) {
     const newText = prompt("Edit your requirement:", currentText);
     
-    // Check if user clicked "Cancel" or entered empty text
+    // check if user clicked "Cancel" or entered empty text
     if (newText !== null && newText.trim() !== '') {
         updateRequirement(projectId, reqId, { text: newText.trim() });
         renderRequirements(); // Refresh the list
     }
 };
 
-// Handle Delete Requirement
+// handle Delete Requirement
 window.handleDelete = function(reqId) {
     if (confirm("Are you sure you want to delete this requirement?")) {
         deleteRequirement(projectId, reqId);
@@ -90,5 +90,5 @@ window.handleDelete = function(reqId) {
     }
 };
 
-// Initial Render
+// initial Render
 renderRequirements();
