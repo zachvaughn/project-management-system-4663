@@ -230,14 +230,16 @@ main hr {
    ========================== */
 
 .chart-title {
-    margin: 15px 0;
+    margin: 15px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
     font-size: 1.1rem;
     font-weight: bold;
     color: #333;
 }
 
 .chart-row {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .chart-header {
@@ -249,17 +251,17 @@ main hr {
 
 .chart-bar-container {
     width: 100%;
-    height: 22px;
-    background: #e9ecef;
-    border-radius: 20px;
+    height: 24px;
+    background-color: #e9ecef;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .chart-bar {
     height: 100%;
     width: 0%;
-    border-radius: 20px;
-    transition: width 0.7s ease-in-out;
+    border-radius: 12px;
+    transition: width 0.8s ease;
 }
 
 .chart-bar.coding {

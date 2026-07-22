@@ -426,20 +426,20 @@ categoryTitle.className = "chart-title";
 categoryTitle.textContent = "📊 Team Effort Distribution";
 categoryReport.appendChild(categoryTitle);
 
-const categoryColors = [
-    "coding",
-    "testing",
-    "documentation",
-    "design",
-    "planning",
-    "meetings",
-    "research",
-    "other"
-];
+const categoryClassMap = {
+    Coding: "coding",
+    Testing: "testing",
+    Documentation: "documentation",
+    Design: "design",
+    Planning: "planning",
+    Meetings: "meetings",
+    Research: "research",
+    Other: "other"
+};
 
 const maxCategoryHours = Math.max(...Object.values(categoryTotals));
 
-Object.entries(categoryTotals).forEach(([category, totalHours], index) => {
+Object.entries(categoryTotals).forEach(([category, totalHours]) => {
     const chartRow = document.createElement("div");
     chartRow.className = "chart-row";
 
@@ -459,7 +459,8 @@ Object.entries(categoryTotals).forEach(([category, totalHours], index) => {
     barContainer.className = "chart-bar-container";
 
     const bar = document.createElement("div");
-    bar.className = `chart-bar ${categoryColors[index % categoryColors.length]}`;
+    const categoryClass = categoryClassMap[category] || "other";
+    bar.className = `chart-bar ${categoryClass}`;
 
     const barWidth = (totalHours / maxCategoryHours) * 100;
 
