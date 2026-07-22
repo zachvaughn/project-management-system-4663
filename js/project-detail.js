@@ -100,214 +100,126 @@ deleteBtn.addEventListener('click', () => {
     }
 });
 
-// task #2
-// add/edit/delete requirements here
-// requirement entries follow this shape: { id, text, type }
-// (type is functional or non-functional)
-// Use currentProject.requirements (array)
-// call saveState() from store.js after any change
+// requirements tracking
+const newRequirementBtn = document.getElementById('new-requirement-btn');
+const newRequirementForm = document.getElementById('new-requirement-form');
+const cancelRequirementBtn = document.getElementById('cancel-requirement-btn');
+const reqSubmitBtn = document.getElementById('req-submit-btn');
+const requirementsList = document.getElementById('requirements-list');
+const requirementsEmptyState = document.getElementById('requirements-empty-state');
 
-// Get the requirement-related elements from project-detail.html
-const newRequirementBtn =
-    document.getElementById('new-requirement-btn');
+let editingRequirementId = null;
 
-const requirementForm =
-    document.getElementById('requirement-form');
+newRequirementBtn.addEventListener('click', () => {
+    editingRequirementId = null;
+    document.getElementById('req-text').value = '';
+    document.getElementById('req-type').value = 'functional';
+    reqSubmitBtn.textContent = 'Add Requirement';
 
-const requirementIdInput =
-    document.getElementById('requirement-id');
+    newRequirementForm.style.display = 'block';
+    newRequirementBtn.style.display = 'none';
+});
 
-const requirementTextInput =
-    document.getElementById('requirement-text');
+cancelRequirementBtn.addEventListener('click', () => {
+    newRequirementForm.reset();
+    newRequirementForm.style.display = 'none';
+    newRequirementBtn.style.display = 'inline-block';
+    editingRequirementId = null;
+});
 
-const requirementTypeInput =
-    document.getElementById('requirement-type');
+newRequirementForm.addEventListener('submit', (e) => {
+    e.preventDefault();
 
-const cancelRequirementBtn =
-    document.getElementById('cancel-requirement-btn');
+    const text = document.getElementById('req-text').value.trim();
+    const type = document.getElementById('req-type').value;
 
-const requirementsList =
-    document.getElementById('requirements-list');
+    if (!text) return;
 
+    if (editingRequirementId) {
+        updateRequirement(currentProjectId, editingRequirementId, { text, type }); // from store.js
+    } else {
+        addRequirement(currentProjectId, text, type); // from store.js
+    }
 
-// Make sure the current project has a requirements array
-if (!Array.isArray(currentProject.requirements)) {
-    currentProject.requirements = [];
-}
+    newRequirementForm.reset();
+    newRequirementForm.style.display = 'none';
+    newRequirementBtn.style.display = 'inline-block';
+    editingRequirementId = null;
 
+    renderRequirements();
+});
 
-// Display all requirements belonging to the current project
 function renderRequirements() {
     requirementsList.innerHTML = '';
 
-    if (currentProject.requirements.length === 0) {
-        const emptyMessage = document.createElement('p');
-        emptyMessage.id = 'requirements-empty-state';
-        emptyMessage.textContent = 'No requirements yet.';
-
-        requirementsList.appendChild(emptyMessage);
+    if (!currentProject.requirements || currentProject.requirements.length === 0) {
+        requirementsEmptyState.style.display = 'block';
+        requirementsList.appendChild(requirementsEmptyState);
         return;
     }
 
-    currentProject.requirements.forEach((requirement) => {
-        const requirementItem = document.createElement('div');
-        requirementItem.classList.add('requirement-item');
+    requirementsEmptyState.style.display = 'none';
 
-        const requirementInformation = document.createElement('div');
-        requirementInformation.classList.add('requirement-information');
+    let frCount = 0;
+    let nfrCount = 0;
 
-        const requirementText = document.createElement('p');
-        requirementText.textContent = requirement.text;
+    currentProject.requirements.forEach(req => {
+        const item = document.createElement('div');
+        item.className = 'requirement-item';
 
-        const requirementType = document.createElement('span');
-        requirementType.classList.add('requirement-type');
-        requirementType.textContent =
-            requirement.type === 'functional'
-                ? 'Functional'
-                : 'Non-Functional';
+        const label = document.createElement('span');
+        const tag = document.createElement('strong');
+        if (req.type === 'functional') {
+            frCount++;
+            tag.textContent = `[FR-${frCount}] `;
+        } else {
+            nfrCount++;
+            tag.textContent = `[NFR-${nfrCount}] `;
+        }
+        label.appendChild(tag);
+        label.appendChild(document.createTextNode(req.text));
+        item.appendChild(label);
 
-        requirementInformation.appendChild(requirementText);
-        requirementInformation.appendChild(requirementType);
-
-        const requirementActions = document.createElement('div');
-        requirementActions.classList.add('requirement-actions');
-
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.textContent = 'Edit';
-        editButton.classList.add('edit-requirement-btn');
-
-        editButton.addEventListener('click', () => {
-            openRequirementForm(requirement);
+        const editBtn = document.createElement('button');
+        editBtn.textContent = 'Edit';
+        editBtn.addEventListener('click', () => {
+            editingRequirementId = req.id;
+            document.getElementById('req-text').value = req.text;
+            document.getElementById('req-type').value = req.type;
+            reqSubmitBtn.textContent = 'Save Changes';
+            newRequirementForm.style.display = 'block';
+            newRequirementBtn.style.display = 'none';
         });
+        item.appendChild(editBtn);
 
-        const deleteButton = document.createElement('button');
-        deleteButton.type = 'button';
-        deleteButton.textContent = 'Delete';
-        deleteButton.classList.add('delete-requirement-btn');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'danger-btn';
+        deleteBtn.addEventListener('click', () => {
+            const confirmed = confirm(`Delete requirement "${req.text}"? This will also remove any effort logged against it.`);
+            if (!confirmed) return;
 
-        deleteButton.addEventListener('click', () => {
-            deleteRequirement(requirement.id);
+            deleteRequirement(currentProjectId, req.id); // from store.js
+
+            // clean up any effort logs tied to this requirement
+            if (currentProject.effortLogs) {
+                currentProject.effortLogs = currentProject.effortLogs.filter(log => log.requirementId !== req.id);
+                saveState();
+            }
+
+            renderRequirements();
+            renderEffortLogs();
+            renderEffortReport();
         });
+        item.appendChild(deleteBtn);
 
-        requirementActions.appendChild(editButton);
-        requirementActions.appendChild(deleteButton);
-
-        requirementItem.appendChild(requirementInformation);
-        requirementItem.appendChild(requirementActions);
-
-        requirementsList.appendChild(requirementItem);
+        requirementsList.appendChild(item);
     });
 }
 
-
-// Open the form for either adding or editing a requirement
-function openRequirementForm(requirement = null) {
-    requirementForm.hidden = false;
-
-    if (requirement) {
-        requirementIdInput.value = requirement.id;
-        requirementTextInput.value = requirement.text;
-        requirementTypeInput.value = requirement.type;
-    } else {
-        requirementForm.reset();
-        requirementIdInput.value = '';
-    }
-
-    requirementTextInput.focus();
-}
-
-
-// Close and clear the requirement form
-function closeRequirementForm() {
-    requirementForm.reset();
-    requirementIdInput.value = '';
-    requirementForm.hidden = true;
-}
-
-
-// Delete a requirement from the current project
-function deleteRequirement(requirementId) {
-    const shouldDelete = confirm(
-        'Are you sure you want to delete this requirement?'
-    );
-
-    if (!shouldDelete) {
-        return;
-    }
-
-    currentProject.requirements =
-        currentProject.requirements.filter(
-            (requirement) => requirement.id !== requirementId
-        );
-
-    saveState();
-    renderRequirements();
-    closeRequirementForm();
-}
-
-
-// Open an empty form when Add Requirement is clicked
-newRequirementBtn.addEventListener('click', () => {
-    openRequirementForm();
-});
-
-
-// Close the form when Cancel is clicked
-cancelRequirementBtn.addEventListener('click', () => {
-    closeRequirementForm();
-});
-
-
-// Add a new requirement or save changes to an existing one
-requirementForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const requirementText =
-        requirementTextInput.value.trim();
-
-    const requirementType =
-        requirementTypeInput.value;
-
-    if (requirementText === '') {
-        alert('Please enter a requirement description.');
-        return;
-    }
-
-    const existingRequirementId =
-        requirementIdInput.value;
-
-    if (existingRequirementId) {
-        const requirementToEdit =
-            currentProject.requirements.find(
-                (requirement) =>
-                    requirement.id === Number(existingRequirementId)
-            );
-
-        if (requirementToEdit) {
-            requirementToEdit.text = requirementText;
-            requirementToEdit.type = requirementType;
-        }
-    } else {
-        const newRequirement = {
-            id: Date.now(),
-            text: requirementText,
-            type: requirementType
-        };
-
-        currentProject.requirements.push(newRequirement);
-    }
-
-    saveState();
-    renderRequirements();
-    closeRequirementForm();
-});
-
-
-// Display any requirements that were previously saved
 renderRequirements();
 
-// task #3
+// effort logging
 const newEffortBtn = document.getElementById('new-effort-btn');
 const newEffortForm = document.getElementById('new-effort-form');
 const cancelEffortBtn = document.getElementById('cancel-effort-btn');
@@ -386,9 +298,7 @@ function renderEffortLogs() {
 
 renderEffortLogs();
 
-
-
-// task #4
+// effort summary
 function renderEffortReport() {
     const emptyState = document.getElementById("report-empty-state");
     const categoryReport = document.getElementById("category-report");
@@ -421,63 +331,62 @@ function renderEffortReport() {
         requirementTotals[log.requirementId] += Number(log.hours);
     });
 
-    const categoryTitle = document.createElement("h4");
-categoryTitle.className = "chart-title";
-categoryTitle.textContent = "📊 Team Effort Distribution";
-categoryReport.appendChild(categoryTitle);
+    // list of category totals
+    const categoryList = document.createElement("ul");
+    for (const category in categoryTotals) {
+        const li = document.createElement("li");
+        li.textContent = `${category}: ${categoryTotals[category]} hour(s)`;
+        categoryList.appendChild(li);
+    }
+    categoryReport.appendChild(categoryList);
 
-const categoryClassMap = {
-    Coding: "coding",
-    Testing: "testing",
-    Documentation: "documentation",
-    Design: "design",
-    Planning: "planning",
-    Meetings: "meetings",
-    Research: "research",
-    Other: "other"
-};
+    // color bar chart
+    const categoryClassMap = {
+        "Requirements Analysis": "analysis",
+        "Design": "design",
+        "Coding": "coding",
+        "Testing": "testing",
+        "Project Management": "management",
+    };
 
-const maxCategoryHours = Math.max(...Object.values(categoryTotals));
+    const maxCategoryHours = Math.max(...Object.values(categoryTotals));
 
-Object.entries(categoryTotals).forEach(([category, totalHours]) => {
-    const chartRow = document.createElement("div");
-    chartRow.className = "chart-row";
+    Object.entries(categoryTotals).forEach(([category, totalHours]) => {
+        const chartRow = document.createElement("div");
+        chartRow.className = "chart-row";
 
-    const chartHeader = document.createElement("div");
-    chartHeader.className = "chart-header";
+        const chartHeader = document.createElement("div");
+        chartHeader.className = "chart-header";
 
-    const categoryLabel = document.createElement("span");
-    categoryLabel.textContent = category;
+        const categoryLabel = document.createElement("span");
+        categoryLabel.textContent = category;
 
-    const hoursLabel = document.createElement("span");
-    hoursLabel.textContent = `${totalHours} hr${totalHours === 1 ? "" : "s"}`;
+        const hoursLabel = document.createElement("span");
+        hoursLabel.textContent = `${totalHours} hr${totalHours === 1 ? "" : "s"}`;
 
-    chartHeader.appendChild(categoryLabel);
-    chartHeader.appendChild(hoursLabel);
+        chartHeader.appendChild(categoryLabel);
+        chartHeader.appendChild(hoursLabel);
 
-    const barContainer = document.createElement("div");
-    barContainer.className = "chart-bar-container";
+        const barContainer = document.createElement("div");
+        barContainer.className = "chart-bar-container";
 
-    const bar = document.createElement("div");
-    const categoryClass = categoryClassMap[category] || "other";
-    bar.className = `chart-bar ${categoryClass}`;
+        const bar = document.createElement("div");
+        const categoryClass = categoryClassMap[category] || "other";
+        bar.className = `chart-bar ${categoryClass}`;
 
-    const barWidth = (totalHours / maxCategoryHours) * 100;
+        const barWidth = (totalHours / maxCategoryHours) * 100;
 
-    barContainer.appendChild(bar);
-    chartRow.appendChild(chartHeader);
-    chartRow.appendChild(barContainer);
-    categoryReport.appendChild(chartRow);
+        barContainer.appendChild(bar);
+        chartRow.appendChild(chartHeader);
+        chartRow.appendChild(barContainer);
+        categoryReport.appendChild(chartRow);
 
-    requestAnimationFrame(() => {
-        bar.style.width = `${barWidth}%`;
+        requestAnimationFrame(() => {
+            bar.style.width = `${barWidth}%`;
+        });
     });
-});
 
-    const requirementTitle = document.createElement("h4");
-    requirementTitle.textContent = "By Requirement";
-    requirementReport.appendChild(requirementTitle);
-
+    // requirement totals list
     const requirementList = document.createElement("ul");
     for (const requirementId in requirementTotals) {
         const requirement = currentProject.requirements.find(r => r.id == requirementId);
@@ -489,4 +398,3 @@ Object.entries(categoryTotals).forEach(([category, totalHours]) => {
 }
 
 renderEffortReport();
- 

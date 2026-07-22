@@ -46,8 +46,8 @@ function addProject(name, description = '', owner = '', members = [], risks = []
         owner: owner,
         members: members, // array of strings
         risks: risks, // array of { description, status }
-        requirements: [], // Task #2 will populate: { id, text, type }
-        effortLogs: [], // Task #3 will populate: { id, requirementId, category, hours, date }
+        requirements: [], // array of { id, text, type }
+        effortLogs: [], // array of { id, requirementId, category, hours, date }
     };
     projects.push(project);
     saveState(); // save after modifying
