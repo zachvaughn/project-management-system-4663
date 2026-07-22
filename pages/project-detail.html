@@ -60,14 +60,63 @@
     <!-- add/edit/delete requirements inside this section -->
     <!-- Use currentProjectId (see project-detail.js) to tie requirements to this project -->
     <section id="requirements-section">
-        <div class="section-header">
-            <h2>Requirements</h2>
-            <button id="new-requirement-btn">+ Add Requirement</button>
+    <div class="section-header">
+        <h2>Requirements</h2>
+
+        <button type="button" id="new-requirement-btn">
+            + Add Requirement
+        </button>
+    </div>
+
+    <form id="requirement-form" hidden>
+        <input type="hidden" id="requirement-id">
+
+        <div>
+            <label for="requirement-text">
+                Requirement Description
+            </label>
+
+            <textarea
+                id="requirement-text"
+                rows="4"
+                required
+                placeholder="Enter the requirement"
+            ></textarea>
         </div>
-        <div id="requirements-list">
-            <p id="requirements-empty-state">No requirements yet.</p>
+
+        <div>
+            <label for="requirement-type">
+                Requirement Type
+            </label>
+
+            <select id="requirement-type" required>
+                <option value="functional">
+                    Functional
+                </option>
+
+                <option value="non-functional">
+                    Non-Functional
+                </option>
+            </select>
         </div>
-    </section>
+
+        <div class="form-actions">
+            <button type="submit" id="save-requirement-btn">
+                Save Requirement
+            </button>
+
+            <button type="button" id="cancel-requirement-btn">
+                Cancel
+            </button>
+        </div>
+    </form>
+
+    <div id="requirements-list">
+        <p id="requirements-empty-state">
+            No requirements yet.
+        </p>
+    </div>
+</section>
 
     <hr>
 

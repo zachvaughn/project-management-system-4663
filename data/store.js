@@ -76,12 +76,20 @@ function deleteProject(id) {
 }
 function addRequirement(projectId, text, type) {
     const project = getProjectById(projectId);
-    if (!project) return null;
+
+    if (!project) {
+        return null;
+    }
+
+    const normalizedType =
+        type.toLowerCase() === 'functional'
+            ? 'functional'
+            : 'non-functional';
 
     const requirement = {
         id: Date.now(),
-        text,
-        type // "Functional" or "Non-Functional"
+        text: text,
+        type: normalizedType
     };
 
     project.requirements.push(requirement);

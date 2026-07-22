@@ -107,7 +107,205 @@ deleteBtn.addEventListener('click', () => {
 // Use currentProject.requirements (array)
 // call saveState() from store.js after any change
 
+// Get the requirement-related elements from project-detail.html
+const newRequirementBtn =
+    document.getElementById('new-requirement-btn');
 
+const requirementForm =
+    document.getElementById('requirement-form');
+
+const requirementIdInput =
+    document.getElementById('requirement-id');
+
+const requirementTextInput =
+    document.getElementById('requirement-text');
+
+const requirementTypeInput =
+    document.getElementById('requirement-type');
+
+const cancelRequirementBtn =
+    document.getElementById('cancel-requirement-btn');
+
+const requirementsList =
+    document.getElementById('requirements-list');
+
+
+// Make sure the current project has a requirements array
+if (!Array.isArray(currentProject.requirements)) {
+    currentProject.requirements = [];
+}
+
+
+// Display all requirements belonging to the current project
+function renderRequirements() {
+    requirementsList.innerHTML = '';
+
+    if (currentProject.requirements.length === 0) {
+        const emptyMessage = document.createElement('p');
+        emptyMessage.id = 'requirements-empty-state';
+        emptyMessage.textContent = 'No requirements yet.';
+
+        requirementsList.appendChild(emptyMessage);
+        return;
+    }
+
+    currentProject.requirements.forEach((requirement) => {
+        const requirementItem = document.createElement('div');
+        requirementItem.classList.add('requirement-item');
+
+        const requirementInformation = document.createElement('div');
+        requirementInformation.classList.add('requirement-information');
+
+        const requirementText = document.createElement('p');
+        requirementText.textContent = requirement.text;
+
+        const requirementType = document.createElement('span');
+        requirementType.classList.add('requirement-type');
+        requirementType.textContent =
+            requirement.type === 'functional'
+                ? 'Functional'
+                : 'Non-Functional';
+
+        requirementInformation.appendChild(requirementText);
+        requirementInformation.appendChild(requirementType);
+
+        const requirementActions = document.createElement('div');
+        requirementActions.classList.add('requirement-actions');
+
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.textContent = 'Edit';
+        editButton.classList.add('edit-requirement-btn');
+
+        editButton.addEventListener('click', () => {
+            openRequirementForm(requirement);
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('delete-requirement-btn');
+
+        deleteButton.addEventListener('click', () => {
+            deleteRequirement(requirement.id);
+        });
+
+        requirementActions.appendChild(editButton);
+        requirementActions.appendChild(deleteButton);
+
+        requirementItem.appendChild(requirementInformation);
+        requirementItem.appendChild(requirementActions);
+
+        requirementsList.appendChild(requirementItem);
+    });
+}
+
+
+// Open the form for either adding or editing a requirement
+function openRequirementForm(requirement = null) {
+    requirementForm.hidden = false;
+
+    if (requirement) {
+        requirementIdInput.value = requirement.id;
+        requirementTextInput.value = requirement.text;
+        requirementTypeInput.value = requirement.type;
+    } else {
+        requirementForm.reset();
+        requirementIdInput.value = '';
+    }
+
+    requirementTextInput.focus();
+}
+
+
+// Close and clear the requirement form
+function closeRequirementForm() {
+    requirementForm.reset();
+    requirementIdInput.value = '';
+    requirementForm.hidden = true;
+}
+
+
+// Delete a requirement from the current project
+function deleteRequirement(requirementId) {
+    const shouldDelete = confirm(
+        'Are you sure you want to delete this requirement?'
+    );
+
+    if (!shouldDelete) {
+        return;
+    }
+
+    currentProject.requirements =
+        currentProject.requirements.filter(
+            (requirement) => requirement.id !== requirementId
+        );
+
+    saveState();
+    renderRequirements();
+    closeRequirementForm();
+}
+
+
+// Open an empty form when Add Requirement is clicked
+newRequirementBtn.addEventListener('click', () => {
+    openRequirementForm();
+});
+
+
+// Close the form when Cancel is clicked
+cancelRequirementBtn.addEventListener('click', () => {
+    closeRequirementForm();
+});
+
+
+// Add a new requirement or save changes to an existing one
+requirementForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const requirementText =
+        requirementTextInput.value.trim();
+
+    const requirementType =
+        requirementTypeInput.value;
+
+    if (requirementText === '') {
+        alert('Please enter a requirement description.');
+        return;
+    }
+
+    const existingRequirementId =
+        requirementIdInput.value;
+
+    if (existingRequirementId) {
+        const requirementToEdit =
+            currentProject.requirements.find(
+                (requirement) =>
+                    requirement.id === Number(existingRequirementId)
+            );
+
+        if (requirementToEdit) {
+            requirementToEdit.text = requirementText;
+            requirementToEdit.type = requirementType;
+        }
+    } else {
+        const newRequirement = {
+            id: Date.now(),
+            text: requirementText,
+            type: requirementType
+        };
+
+        currentProject.requirements.push(newRequirement);
+    }
+
+    saveState();
+    renderRequirements();
+    closeRequirementForm();
+});
+
+
+// Display any requirements that were previously saved
+renderRequirements();
 
 // task #3
 const newEffortBtn = document.getElementById('new-effort-btn');
