@@ -422,16 +422,57 @@ function renderEffortReport() {
     });
 
     const categoryTitle = document.createElement("h4");
-    categoryTitle.textContent = "By Category";
-    categoryReport.appendChild(categoryTitle);
+categoryTitle.className = "chart-title";
+categoryTitle.textContent = "📊 Team Effort Distribution";
+categoryReport.appendChild(categoryTitle);
 
-    const categoryList = document.createElement("ul");
-    for (const category in categoryTotals) {
-        const li = document.createElement("li");
-        li.textContent = `${category}: ${categoryTotals[category]} hour(s)`;
-        categoryList.appendChild(li);
-    }
-    categoryReport.appendChild(categoryList);
+const categoryClassMap = {
+    Coding: "coding",
+    Testing: "testing",
+    Documentation: "documentation",
+    Design: "design",
+    Planning: "planning",
+    Meetings: "meetings",
+    Research: "research",
+    Other: "other"
+};
+
+const maxCategoryHours = Math.max(...Object.values(categoryTotals));
+
+Object.entries(categoryTotals).forEach(([category, totalHours]) => {
+    const chartRow = document.createElement("div");
+    chartRow.className = "chart-row";
+
+    const chartHeader = document.createElement("div");
+    chartHeader.className = "chart-header";
+
+    const categoryLabel = document.createElement("span");
+    categoryLabel.textContent = category;
+
+    const hoursLabel = document.createElement("span");
+    hoursLabel.textContent = `${totalHours} hr${totalHours === 1 ? "" : "s"}`;
+
+    chartHeader.appendChild(categoryLabel);
+    chartHeader.appendChild(hoursLabel);
+
+    const barContainer = document.createElement("div");
+    barContainer.className = "chart-bar-container";
+
+    const bar = document.createElement("div");
+    const categoryClass = categoryClassMap[category] || "other";
+    bar.className = `chart-bar ${categoryClass}`;
+
+    const barWidth = (totalHours / maxCategoryHours) * 100;
+
+    barContainer.appendChild(bar);
+    chartRow.appendChild(chartHeader);
+    chartRow.appendChild(barContainer);
+    categoryReport.appendChild(chartRow);
+
+    requestAnimationFrame(() => {
+        bar.style.width = `${barWidth}%`;
+    });
+});
 
     const requirementTitle = document.createElement("h4");
     requirementTitle.textContent = "By Requirement";
